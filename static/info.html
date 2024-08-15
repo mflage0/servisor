@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Servisor</title>
+    <link rel="stylesheet" href="/static/css/ele.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="icon" href="/static/images/super.svg" type="image/svg+xml">
+</head>
+
+<body>
+    <div id="app">
+        <template>
+            <!-- 使用新的容器来控制宽度 -->
+            <div class="outer-container">
+                <div class="container">
+                    <h2>Servisor:
+                        <a class="styled-g" v-if="status==='running'">{{ status }}</a>
+                        <a class="styled-r" v-else>{{ status }}</a>
+                    </h2>
+                    <div class="container">
+                        <div style="margin: 0 20px;" class="container">
+                            <h4>版本：<h4 class="styled-g">{{ version }}</h4>
+                            </h4>
+                        </div>
+<!--                        <a class="link" @click="stop" v-if="status==='running'">停止</a>-->
+                        <a class="link" @click="restart" v-if="status==='running'">重启</a>
+                        <a class="link" @click="restart" v-else>启用</a>
+                        <a class="link" @click="get_setting" v-if="status==='running'">设置</a>
+                    </div>
+                </div>
+
+                <div class="add-button" @click="createJc" v-if="status==='running'">创建守护进程</div>
+                <div class="add-button" v-else>守护进程已停止，请先启用</div>
+
+                <div class="styled-div" v-loading="loading">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>名称</th>
+                                <th>启动命令</th>
+                                <th>运行目录</th>
+                                <th>管理</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="item in items">
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.command }}</td>
+                                <td>{{ item.directory }}</td>
+                                <td style="cursor: pointer;" v-if="item.status == 'RUNNING'"><span
+                                        class="status styled-g" @click="stop_process(item.name)"><i
+                                            class="el-icon-video-pause"></i> 已启动</span></td>
+                                <td v-else style="cursor: pointer;"><span class="stop styled-r"
+                                        @click="start_process(item.name)"><i class="el-icon-video-play"></i> 已停止</span>
+                                </td>
+                                <td v-if="item.status=='RUNNING'" class="status styled-g">{{ item.status }}</td>
+                                <td v-else class="stop styled-r">{{ item.status }}</td>
+                                <td>
+                                    <a class="link" @click="edit_process_config(item)">编辑</a>
+                                    <a class="link" @click="get_process_config(item.name)">源文</a>
+                                    <a class="link" @click="get_process_log(item.name)">日志</a>
+                                    <a class="link" @click="restart_process(item.name)">重启</a>
+                                    <a class="link" @click="delete_process(item.name)">删除</a>
+                                </td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <el-dialog title="源文" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+                <el-input type="textarea" autosize resize="none" placeholder="请输入内容" v-model="input"
+                    :readonly="input_read">
+                </el-input>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="submitYw">确 定</el-button>
+                </span>
+            </el-dialog>
+
+            <el-dialog title="日志" :visible.sync="tabVisible" width="60%" :before-close="handleClose">
+                <el-tabs v-model="activeName" type="card" @tab-click="handleClick" :visible.sync="tabVisible">
+                    <el-tab-pane label="运行日志" name="first">
+                        <el-input type="textarea" autosize resize="none" placeholder="请输入内容" v-model="input"
+                            :readonly="input_read">
+                        </el-input>
+                    </el-tab-pane>
+                    <el-tab-pane label="错误日志" name="second">
+                        <el-input type="textarea" autosize resize="none" placeholder="请输入内容" v-model="input"
+                            :readonly="input_read">
+                        </el-input>
+                    </el-tab-pane>
+                </el-tabs>
+            </el-dialog>
+
+            <el-dialog :title="title" :visible.sync="makeVisible" width="60%" :before-close="handleClose">
+                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                    <el-form-item label="名称" prop="name">
+                        <el-input v-model="ruleForm.name" :disabled="title=='编辑'"></el-input>
+                    </el-form-item>
+                    <el-form-item label="运行目录" prop="directory">
+                        <el-input v-model="ruleForm.directory"></el-input>
+                    </el-form-item>
+                    <el-form-item label="启动命令" prop="command">
+                        <el-input v-model="ruleForm.command"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button @click="resetForm('ruleForm')">取 消</el-button>
+                        <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-dialog>
+        </template>
+    </div>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/ele.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/index.js"></script>
+</body>
+</html>

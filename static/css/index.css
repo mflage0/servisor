@@ -1,0 +1,119 @@
+.outer-container {
+    width: 80%;
+    /* 占据屏幕的 80% */
+    margin: 0 auto;
+    /* 居中对齐 */
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    /* 左右对齐 */
+    align-items: center;
+    /* 垂直居中 */
+}
+
+a {
+    margin-left: 10px;
+    /* 添加一些间距 */
+}
+
+.styled-div {
+    margin: 10px auto;
+    /* 居中对齐并添加一些外边距 */
+    padding: 20px;
+    /* 添加内边距 */
+    border-radius: 10px;
+    /* 圆角边框 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* 盒阴影 */
+    background-color: #f8f9fa;
+    /* 背景颜色 */
+    border: 1px solid #e0e0e0;
+    /* 边框颜色 */
+}
+
+.styled-div table {
+    width: 100%;
+    border-collapse: collapse;
+    /* 移除单元格之间的间距 */
+    margin-top: 20px;
+    font-size: 0.95em;
+    color: #333;
+}
+
+.styled-div th,
+.styled-div td {
+    padding: 12px 15px;
+    /* 单元格内间距 */
+    text-align: center;
+    /* 文本左对齐 */
+}
+
+.styled-div th {
+    background-color: #e9ecef;
+    /* 表头背景色 */
+    border-bottom: 2px solid #dee2e6;
+    /* 表头下方边框 */
+}
+
+.styled-div tr {
+    border-bottom: 1px solid #dee2e6;
+    /* 行底部分割线 */
+}
+
+.styled-div tr:last-child {
+    border-bottom: none;
+    /* 移除最后一行的底部分割线 */
+}
+
+.styled-div tr:hover {
+    background-color: #f1f3f5;
+    /* 行悬停背景色 */
+}
+
+.add-button {
+    display: inline-block;
+    padding: 10px 0px;
+    margin-bottom: 10px;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    text-decoration: none;
+    width: 100%;
+}
+
+.add-button:hover {
+    background-color: #0056b3;
+}
+
+.styled-g {
+    color: #28ac00;
+}
+
+.styled-r {
+    color: #ff3300;
+}
+
+.link {
+    margin-right: 10px;
+    color: #337ab7;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.link:hover {
+    color: #003cff;
+}
+
+.el-textarea .el-textarea__inner {
+    background-color: #333;
+    color: #fff;
+    max-height: 50vh;
+    min-height: 50vh !important;
+}
