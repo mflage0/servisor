@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8">
     <title>Servisor</title>
-    <link rel="stylesheet" href="static/css/ele.css">
-    <link rel="stylesheet" href="static/css/index.css">
-    <link rel="icon" href="static/images/super.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./css/ele.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="icon" href="./images/super.svg" type="image/svg+xml">
 </head>
 
 <body>
@@ -34,7 +34,7 @@
                 <div class="add-button" @click="createJc" v-if="status==='running'">创建守护进程</div>
                 <div class="add-button" v-else>守护进程已停止，请先启用</div>
 
-                <el-table :data="items" :cell-style="{ textAlign: 'center' }"
+                <el-table :data="items" :cell-style="{ textAlign: 'center' }" v-loading="loading"
                     :header-cell-style="{textAlign: 'center',background:'#eef1f6',color:'#606266'}" border
                     style="width: 100%">
                     <el-table-column label="序号" width="100">
@@ -117,9 +117,9 @@
     </div>
 
 </body>
-<script src="static/js/vue.min.js"></script>
-<script src="static/js/ele.js"></script>
-<script src="static/js/axios.min.js"></script>
-<script src="static/js/index.js"></script>
+<script src="./js/vue.min.js"></script>
+<script src="./js/ele.js"></script>
+<script src="./js/axios.min.js"></script>
+<script src="./js/index.js"></script>
 
 </html>
