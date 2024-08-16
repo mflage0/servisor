@@ -114,8 +114,8 @@ a {
 .el-textarea .el-textarea__inner {
     background-color: #333;
     color: #fff;
-    max-height: 50vh;
-    min-height: 50vh !important;
+    max-height: 40vh;
+    min-height: 40vh !important;
 }
 
 .el-table--border {
