@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8">
     <title>Servisor</title>
-    <link rel="stylesheet" href="/static/css/ele.css">
-    <link rel="stylesheet" href="/static/css/index.css">
-    <link rel="icon" href="/static/images/super.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./css/ele.css">
+    <link rel="stylesheet" href="./css/index.css">
+    <link rel="icon" href="./images/super.svg" type="image/svg+xml">
 </head>
 
 <body>
@@ -24,7 +24,7 @@
                             <h4>版本：<h4 class="styled-g">{{ version }}</h4>
                             </h4>
                         </div>
-<!--                        <a class="link" @click="stop" v-if="status==='running'">停止</a>-->
+                        <!--                        <a class="link" @click="stop" v-if="status==='running'">停止</a>-->
                         <a class="link" @click="restart" v-if="status==='running'">重启</a>
                         <a class="link" @click="restart" v-else>启用</a>
                         <a class="link" @click="get_setting" v-if="status==='running'">设置</a>
@@ -34,41 +34,40 @@
                 <div class="add-button" @click="createJc" v-if="status==='running'">创建守护进程</div>
                 <div class="add-button" v-else>守护进程已停止，请先启用</div>
 
-                <div class="styled-div" v-loading="loading">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>名称</th>
-                                <th>启动命令</th>
-                                <th>运行目录</th>
-                                <th>管理</th>
-                                <th>状态</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="item in items">
-                                <td>{{ item.name }}</td>
-                                <td>{{ item.command }}</td>
-                                <td>{{ item.directory }}</td>
-                                <td style="cursor: pointer;" v-if="item.status == 'RUNNING'"><span
-                                        class="status styled-g" @click="stop_process(item.name)"><i
-                                            class="el-icon-video-pause"></i> 已启动</span></td>
-                                <td v-else style="cursor: pointer;"><span class="stop styled-r"
-                                        @click="start_process(item.name)"><i class="el-icon-video-play"></i> 已停止</span>
-                                </td>
-                                <td v-if="item.status=='RUNNING'" class="status styled-g">{{ item.status }}</td>
-                                <td v-else class="stop styled-r">{{ item.status }}</td>
-                                <td>
-                                    <a class="link" @click="edit_process_config(item)">编辑</a>
-                                    <a class="link" @click="get_process_config(item.name)">源文</a>
-                                    <a class="link" @click="get_process_log(item.name)">日志</a>
-                                    <a class="link" @click="restart_process(item.name)">重启</a>
-                                    <a class="link" @click="delete_process(item.name)">删除</a>
-                                </td>
-                        </tbody>
-                    </table>
-                </div>
+                <el-table :data="items" :cell-style="{ textAlign: 'center' }"
+                    :header-cell-style="{textAlign: 'center',background:'#eef1f6',color:'#606266'}" border
+                    style="width: 100%">
+                    <el-table-column label="序号" width="100">
+                        <template slot-scope="scope">
+                            <span style="margin-left: 10px">{{ scope.$index + 1 }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="名称" prop="name"></el-table-column>
+                    <el-table-column label="启动命令" prop="command" show-overflow-tooltip></el-table-column>
+                    <el-table-column label="运行目录" prop="directory" show-overflow-tooltip></el-table-column>
+                    <el-table-column label="管理">
+                        <template slot-scope="scope">
+                            <span v-if="scope.row.status == 'RUNNING'" class="status styled-g"
+                                @click="stop_process(scope.row.name)"><i class="el-icon-video-pause"></i> 已启动</span>
+                            <span v-else class="stop styled-r" @click="start_process(scope.row.name)"><i
+                                    class="el-icon-video-play"></i> 已停止</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="状态">
+                        <template slot-scope="scope">
+                            <el-tag :type="scope.row.status=='RUNNING'?'success':'danger'">{{scope.row.status}}</el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="300">
+                        <template slot-scope="scope">
+                            <a class="link" @click="edit_process_config(scope.row)">编辑</a>
+                            <a class="link" @click="get_process_config(scope.row.name)">源文</a>
+                            <a class="link" @click="get_process_log(scope.row.name)">日志</a>
+                            <a class="link" @click="restart_process(scope.row.name)">重启</a>
+                            <a class="link" @click="delete_process(scope.row.name)">删除</a>
+                        </template>
+                    </el-table-column>
+                </el-table>
             </div>
             <el-dialog title="源文" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
                 <el-input type="textarea" autosize resize="none" placeholder="请输入内容" v-model="input"
@@ -104,7 +103,9 @@
                         <el-input v-model="ruleForm.directory"></el-input>
                     </el-form-item>
                     <el-form-item label="启动命令" prop="command">
-                        <el-input v-model="ruleForm.command"></el-input>
+                        <!-- <el-input v-model="ruleForm.command"></el-input> -->
+                        <el-input type="textarea" autosize resize="none" placeholder="请输入内容" v-model="ruleForm.command">
+                        </el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button @click="resetForm('ruleForm')">取 消</el-button>
@@ -114,9 +115,11 @@
             </el-dialog>
         </template>
     </div>
-    <script src="/static/js/vue.min.js"></script>
-    <script src="/static/js/ele.js"></script>
-    <script src="/static/js/axios.min.js"></script>
-    <script src="/static/js/index.js"></script>
+
 </body>
+<script src="./js/vue.min.js"></script>
+<script src="./js/ele.js"></script>
+<script src="./js/axios.min.js"></script>
+<script src="./js/index.js"></script>
+
 </html>
