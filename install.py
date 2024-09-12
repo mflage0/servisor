@@ -56,14 +56,15 @@ if not username:
 
 server_host = subprocess.run(['hostname'], capture_output=True, text=True).stdout.strip()
 server_host = 'ct8.pl' if 'ct8' in server_host else 'serv00.net'
+host = f"servisor.{username}.{server_host}"
 
-answer = input(f"Servisor需要占用{username}.{server_host}，请确认(Y/n)").strip().lower()
+answer = input(f"Servisor需要占用{host}，请确认(Y/n)").strip().lower()
 if answer == 'y' or answer == 'yes':
     subprocess.run(['devil', 'binexec', 'on'], capture_output=True, text=True)
     execute_command(['python', '-m', 'venv', venv_path], '创建Python环境')
-    execute_command(['devil', 'www', 'del', f'{username}.{server_host}', '--remove'], '删除旧的域名环境')
-    execute_command(['devil', 'www', 'add', f'{username}.{server_host}', 'python', python_path], '新建Servisor域名...')
-    target_dir = f'/home/{username}/domains/{username}.{server_host}/public_python'
+    execute_command(['devil', 'www', 'del', f'{host}', '--remove'], '删除旧的域名环境')
+    execute_command(['devil', 'www', 'add', f'{host}', 'python', python_path], '新建Servisor域名...')
+    target_dir = f'/home/{username}/domains/{host}/public_python'
     # 递归复制整个目录
     try:
         with open('servisor/config.py', 'a', encoding='utf-8') as f:
@@ -80,7 +81,7 @@ if answer == 'y' or answer == 'yes':
         print(f"目标目录 {target_dir} 已经存在。")
     except Exception as e:
         print(f"发生错误: {e}")
-    subprocess.run(['rm', '-rf', f'/home/{username}/domains/{username}.{server_host}/public_python/public/'],
+    subprocess.run(['rm', '-rf', f'/home/{username}/domains/{host}/public_python/public/'],
                    capture_output=True,
                    text=True)
     execute_command([python_path, '-m', 'pip', 'install', '-r', f'{target_dir}/requirements.txt'],
@@ -123,11 +124,11 @@ serverurl = unix://{servisor_path}/run/supervisor.sock
 [include]
 files  = {servisor_path}/supervisor.d/*.ini
 """)
-    execute_command(['devil', 'www', 'restart', f'{username}.{server_host}'], '启动守护进程')
-    print(f"请前往https://{username}.{server_host}，登陆后查看守护进程运行状态")
+    execute_command(['devil', 'www', 'restart', f'{host}'], '启动守护进程')
+    print(f"请前往https://{host}，登陆后查看守护进程运行状态")
     print("Servisor安装完成")
     shutil.rmtree('servisor')
 elif answer == 'n' or answer == 'no':
-    print(f"你取消了，占用{username}.{server_host}。")
+    print(f"你取消了，占用{host}。")
 else:
     print("无效的输入，请输入 Y 或 n。")
