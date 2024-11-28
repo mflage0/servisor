@@ -56,7 +56,7 @@ if not username:
 
 server_host = subprocess.run(['hostname'], capture_output=True, text=True).stdout.strip()
 server_host = 'ct8.pl' if 'ct8' in server_host else 'serv00.net'
-host = f"{username}.{server_host}"
+host = f"servisor.{username}.{server_host}"
 
 answer = input(f"Servisor需要占用{host}，请确认(Y/n)").strip().lower()
 if answer == 'y' or answer == 'yes':
@@ -125,7 +125,7 @@ serverurl = unix://{servisor_path}/run/supervisor.sock
 files  = {servisor_path}/supervisor.d/*.ini
 """)
     execute_command(['devil', 'www', 'restart', f'{host}'], '启动守护进程')
-    print(f"请前往https://{host}，登陆后查看守护进程运行状态")
+    print(f"请前往{host}，登陆后查看守护进程运行状态")
     print("Servisor安装完成")
     shutil.rmtree('servisor')
 elif answer == 'n' or answer == 'no':
