@@ -56,7 +56,7 @@ if not username:
 
 server_host = subprocess.run(['hostname'], capture_output=True, text=True).stdout.strip()
 server_host = 'ct8.pl' if 'ct8' in server_host else 'serv00.net'
-host = f"servisor.{username}.{server_host}"
+host = f"{username}.{server_host}"
 
 answer = input(f"Servisor需要占用{host}，请确认(Y/n)").strip().lower()
 if answer == 'y' or answer == 'yes':
